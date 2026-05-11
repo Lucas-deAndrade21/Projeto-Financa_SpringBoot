@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "usuarios")
-@Data // Gera Getters, Setters, toString, equals e hashCode automaticamente
-@NoArgsConstructor // Gera o construtor vazio (exigido pelo JPA)
-@AllArgsConstructor // Gera um construtor com todos os campos
-public class Usuario {
+@Table(name = "categorias")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Categorias {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,8 +19,9 @@ public class Usuario {
     private String nome;
 
     @Column(nullable = false)
-    private String email;
+    private String icone; // Ex: "fa-car" (Facilita a vida do Front-end)
 
     @Column(nullable = false)
-    private String senha;    
+    private Integer importancia; // Gráficos: 1 (verde) até 5 (vermelho)
+
 }

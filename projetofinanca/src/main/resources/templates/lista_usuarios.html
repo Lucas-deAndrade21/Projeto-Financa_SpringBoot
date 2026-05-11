@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Usuários</title>
+    <style>
+        table { width: 80%; border-collapse: collapse; margin: 20px auto; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .btn-excluir { color: red; }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Clientes Cadastrados</h2>
+    <div style="text-align: center;">
+        <a th:href="@{../usuarios/novo}">+ Cadastrar Novo</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th colspan="2">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="u : ${usuarios}">
+                <td th:text="${u.id}"></td>
+                <td th:text="${u.nome}"></td>
+                <td th:text="${u.email}"></td>
+                <td>
+                    <form th:action="@{/usuarios/editar}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${u.id}" />
+                        <button type="submit">Editar</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/usuarios/excluir}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${u.id}" />
+                        <button type="submit" onclick="return confirm('Deseja excluir esse usuário?')">
+                            Excluir
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

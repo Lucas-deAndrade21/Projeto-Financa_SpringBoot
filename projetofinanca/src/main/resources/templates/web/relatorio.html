@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="menu-lateral col-2">
+            <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="transacao.html">Transações</a></li>
+                <li><a href="relatorio.html" class="active">Relatório</a></li>
+                <li><a href="configuracao.html">Configurações</a></li>
+            </ul>
+            <button class="sair"><a href="login.html">Sair</a></button>
+        </div>
+        <div id="conteudo-principal" class="col-10">
+            <h1>Relatório</h1>
+            
+            <button id="gerar-relatorio">Gerar Relatório</button> <!--Botão para gerar o relatório com os dados do BD-->
+
+            <!-- Relatório anual de gastos por categoria mês a mês -->
+             <div class="relatorio-anual">
+                <table id="relatorio-anual">
+                    <thead>
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Janeiro</th>
+                            <th>Fevereiro</th>
+                            <th>Março</th>
+                            <th>Abril</th>
+                            <th>Maio</th>
+                            <th>Junho</th>
+                            <th>Julho</th>
+                            <th>Agosto</th>
+                            <th>Setembro</th>
+                            <th>Outubro</th>
+                            <th>Novembro</th>
+                            <th>Dezembro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Exemplo de linha de dados -->
+                        <tr>
+                            <td>Alimentação</td>
+                            <td>R$ 500,00</td>
+                            <td>R$ 450,00</td>
+                            <td>R$ 600,00</td>
+                            <td>R$ 550,00</td>
+                            <td>R$ 700,00</td>
+                            <td>R$ 650,00</td>
+                            <td>R$ 800,00</td>
+                            <td>R$ 750,00</td>
+                            <td>R$ 900,00</td>
+                            <td>R$ 850,00</td>
+                            <td>R$ 1000,00</td>
+                            <td>R$ 1000,00</td>
+                        </tr>
+                        <tr>
+                            <td>Transporte</td>
+                            <td>R$ 300,00</td>
+                            <td>R$ 250,00</td>
+                            <td>R$ 350,00</td>
+                            <td>R$ 400,00</td>
+                            <td>R$ 450,00</td>
+                            <td>R$ 500,00</td>
+                            <td>R$ 550,00</td>
+                            <td>R$ 600,00</td>
+                            <td>R$ 650,00</td>
+                            <td>R$ 700,00</td>
+                            <td>R$ 750,00</td>
+                            <td>R$ 250,00</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+             </div>
+        </div>
+    </div>
+
+</body>
+</html>

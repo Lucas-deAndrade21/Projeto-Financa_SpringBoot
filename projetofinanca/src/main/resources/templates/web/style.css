@@ -1,0 +1,486 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Google Sans Flex", sans-serif;
+    font-weight: 400;
+}
+
+.cherry-bomb-one-regular {
+  font-family: "Cherry Bomb One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 38px;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+/* Container principal */
+.container {
+    max-width: 1800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0px;
+
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+/* Grid interno */
+.nested-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Classes utilitárias */
+.col-1  { grid-column: span 1; }
+.col-2  { grid-column: span 2; }
+.col-3  { grid-column: span 3; }
+.col-4  { grid-column: span 4; }
+.col-5  { grid-column: span 5; }
+.col-6  { grid-column: span 6; }
+.col-7  { grid-column: span 7; }
+.col-8  { grid-column: span 8; }
+.col-9  { grid-column: span 9; }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+/* Blocos principais */
+.box {
+    background: white;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Cores específicas */
+header {
+    background: #2563eb;
+    color: white;
+}
+
+nav {
+    background: #16a34a;
+    color: white;
+    min-height: 300px;
+}
+
+main {
+    background: #ffffff;
+    min-height: 300px;
+}
+
+aside {
+    background: #f59e0b;
+    color: white;
+    min-height: 300px;
+}
+
+footer {
+    background: #111827;
+    color: white;
+}
+
+/* Cards internos */
+.card {
+    background-color: rgba(255, 255, 255, 0.911);
+    padding: 20px;
+    border-radius: 6px;
+    height: 100px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    [class^="col-"] {
+        grid-column: span 12;
+    }
+}
+
+h1 {
+    padding: 20px 20px;
+    background-color: rgba(255, 255, 255, 0.911);
+    font-size: 29px;
+    font-weight: normal;
+}
+
+a,
+a:link,
+a:visited,
+a:active {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+a:hover {
+    color: white;
+    text-decoration: none;
+    background-color: #026850b8;
+    border-radius: 4px;
+}
+
+a.active {
+    background-color: #026850b8;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+ul {
+    list-style: none;
+    padding: 20px 0px;
+}
+
+li {
+    margin-bottom: 13px;
+}
+
+.dashboard {
+    font-weight: bold;
+}
+
+.dashboard h4 {
+    font-size: 14px;
+}
+
+#card-1 {
+    background-color: #00E0AC;
+}
+
+#card-1 p {
+    font-size: 26px;
+    font-weight: bold;
+    padding-top: 10px;
+    text-align: center;
+}
+
+#card-2 {
+    background-color: #FF3366;
+}
+
+#card-2 p {
+    font-size: 26px;
+    font-weight: bold;
+    padding-top: 10px;
+    text-align: center;
+}
+
+#salario-despesa > .card {
+    margin-bottom: 10px;
+}
+
+#graficos-pizza {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+}
+
+#graficos-pizza > .card {
+    width: 49.11%;
+    height: 210px;
+}
+
+#big-numbers > .card {
+    height: 210px;
+    gap: 15px;
+}
+
+#top-3-categorias > .card {
+    height: 175px;
+}
+
+.sair {
+    background-color: #f28080;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.sair a {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+    display: block;
+}
+
+.menu-lateral {
+    background: #00916E;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#conteudo-principal {
+    background: #3534340d;
+    min-height: 100vh;
+}
+
+.corpo-principal {
+    padding: 10px 20px;
+}
+
+.filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#form-gastos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    margin-top: 1%;
+}
+
+#form-gastos label {
+    display: auto;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type=text],[type=number],[type=date] {
+  padding: 12px;
+  margin: 8px 8px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#form-gastos select {
+    padding: 12px;
+    margin: 8px 8px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#descricao {
+    width: 50%;
+}
+
+#valor {
+    width: 20%;
+}
+
+#parcela {
+    width: 6%;
+}
+
+#data {
+    margin-left: 4%;
+    margin-right: 2.3%;
+    width: 20%;
+}
+
+#categoria {
+    width: 20%;
+}
+
+input[type=submit] {
+  width: 38.5%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.linha-pontilhada {
+    border-top: 1px dashed #ccc;
+    margin: 20px 0;
+    margin-top: 5px;
+}
+
+.extrato {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+
+.extrato h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.extrato table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.grupo-data td {
+    background: #f5f7fa;
+    font-weight: 600;
+    padding: 14px 16px;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #d1d5db;
+}
+
+.grupo-data .data {
+    float: left;
+    color: #111827;
+}
+
+.grupo-data .total-dia {
+    float: right;
+    color: #2563eb;
+}
+
+.movimento td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #374151;
+}
+
+.movimento:hover {
+    background: #fafafa;
+}
+
+.movimento td:nth-child(2) {
+    font-weight: 600;
+    color: #dc2626; /* vermelho para despesas */
+}
+
+#gerar-relatorio {
+    background-color: #EE6123;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    float: right;
+    width: 10%;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-right: 0.5%;
+}
+
+.relatorio-anual {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    margin-top: 5%;
+    overflow-x: auto;
+    max-height: 100vh;
+}
+
+/* Tabela */
+#relatorio-anual {
+    width: 100%;
+    min-width: 1400px; /* Garante espaço para os 12 meses */
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+/* Cabeçalho */
+#relatorio-anual thead th {
+    background: #f5f7fa;
+    color: #111827;
+    font-weight: 600;
+    padding: 14px 16px;
+    text-align: center;
+    border-bottom: 2px solid #d1d5db;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Primeira coluna (Categoria) alinhada à esquerda */
+#relatorio-anual thead th:first-child,
+#relatorio-anual tbody td:first-child {
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    left: 0;
+    background: #ffffff;
+    z-index: 2;
+}
+
+/* Ajuste do cabeçalho da primeira coluna */
+#relatorio-anual thead th:first-child {
+    background: #f5f7fa;
+    z-index: 3;
+}
+
+/* Células */
+#relatorio-anual tbody td {
+    padding: 14px 16px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    color: #374151;
+    white-space: nowrap;
+}
+
+/* Hover nas linhas */
+#relatorio-anual tbody tr:hover {
+    background: #fafafa;
+}
+
+/* Última linha sem borda */
+#relatorio-anual tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Valores monetários */
+#relatorio-anual tbody td:not(:first-child) {
+    font-weight: 500;
+    color: #dc2626; /* Vermelho para despesas */
+}
+
+/* Scroll customizado */
+.relatorio-anual::-webkit-scrollbar {
+    height: 8px;
+}
+
+.relatorio-anual::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.relatorio-anual::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.relatorio-anual::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

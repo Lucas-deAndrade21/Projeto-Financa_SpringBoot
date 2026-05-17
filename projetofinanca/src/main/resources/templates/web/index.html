@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
+
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            var data_1 = google.visualization.arrayToDataTable([
+                ['Categoria', 'Valor'],
+                ['Alimentação', 500],
+                ['Transporte', 300],
+                ['Lazer', 200],
+                ['Saúde', 100]
+            ]);
+            
+            var options_1 = {
+                pieHole: 0.4,
+                backgroundColor: 'transparent',
+                width: 420,
+                height: 280,
+                legend: { position: 'right', textStyle: { fontSize: 12 } },
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('pizza-gasto-por-categoria'));
+            chart.draw(data_1, options_1);
+
+            var data_2 = google.visualization.arrayToDataTable([
+                ['Tipo de Pagamento', 'Valor'],
+                ['Crédito', 400],
+                ['Débito', 300],
+                ['Assinatura', 200]
+            ]);
+
+            var options_2 = {
+                pieHole: 0.4,
+                backgroundColor: 'transparent',
+                width: 420,
+                height: 280,
+                legend: { position: 'right', textStyle: { fontSize: 12 } },
+            };
+
+            var chart2 = new google.visualization.PieChart(document.getElementById('pizza-gasto-por-tipo-pagamento'));
+            chart2.draw(data_2, options_2);
+        }
+    </script>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="menu-lateral col-2">
+            <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
+            <ul>
+                <li><a href="index.html" class="active">Dashboard</a></li>
+                <li><a href="transacao.html">Transações</a></li>
+                <li><a href="relatorio.html">Relatório</a></li>
+                <li><a href="configuracao.html">Configurações</a></li>
+            </ul>
+            <button class="sair"><a href="login.html">Sair</a></button>
+        </div>
+        <div id="conteudo-principal" class="col-10">
+            <h1>Dashboard</h1>
+            <div class="corpo-principal">
+                <div class="filtros">
+                    <label for="periodo">Período:</label>
+                    <select id="periodo" name="periodo">
+                        <option value="mensal">Mensal</option>
+                        <option value="anual">Anual</option>
+                        <option value="personalizado">Personalizado</option> <!--Opção para escolher um período específico -->
+                    </select>
+                </div>
+            
+                <div class="dashboard">
+                    <div id="big-numbers" class="nested-grid col-12">
+                        <div id="salario-despesa" class="col-4">
+                            <div id="card-1" class="card">
+                                <h4>Renda Mensal</h4>
+                                <p id="renda-mensal">R$ 5.000,00</p>
+                            </div>
+                            <div id="card-2" class="card">
+                                <h4>Despesas</h4>
+                                <p id="despesa-total">R$ 3.000,00</p>
+                            </div>
+                        </div>
+                        <div id="graficos-pizza" class="col-8">
+                            <div id="card-3" class="card">
+                                <h4>Gastos por Categoria</h4>
+                                <div id="pizza-gasto-por-categoria" style="margin-top: -60px; margin-left: -20px;"></div>
+                            </div>
+                            <div id="card-4" class="card">
+                                <h4>Gastos por Tipo de Pagamento</h4>
+                                <div id="pizza-gasto-por-tipo-pagamento" style="margin-top: -60px; margin-left: -20px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="top-3-categorias" class="nested-grid col-12">
+                        <div id="card-5" class="card col-6">
+                            <h4>Saldo Atual</h4>
+                            </br>
+                            <p>R$ 5.000,00</p>
+                        </div>
+                        <div id="card-6" class="card col-6">
+                            <h4>Despesas Mensais</h4>
+                            </br>
+                            <p>R$ 2.000,00</p>
+                        </div>
+                        <div id="card-7" class="card col-6">
+                            <h4>Receitas Mensais</h4>
+                            </br>
+                            <p>R$ 7.000,00</p>
+                        </div>
+                        <div id="card-8" class="card col-6">
+                            <h4>Transações Pendentes</h4>
+                            </br>
+                            <p>3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="menu-lateral col-2">
+            <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="transacao.html">Transações</a></li>
+                <li><a href="relatorio.html">Relatório</a></li>
+                <li><a href="configuracao.html" class="active">Configurações</a></li>
+            </ul>
+            <button class="sair"><a href="login.html">Sair</a></button>
+        </div>
+        <div id="conteudo-principal" class="col-10">
+            <h1>Configurações</h1>
+            <button id="editar-perfil">Editar Perfil</button> <!--Botão para editar as informações do perfil do usuário-->
+            <button id="gerenciar-categorias">Categorias</button> <!--Botão para adicionar, editar ou excluir categorias de gastos-->
+            <button id="gerenciar-metas">Metas</button> <!--Botão para definir metas de gastos e acompanhar o progresso-->
+            <!-- Funcionalidade do Admin -->
+            <button id="gerenciar-usuarios">Usuários</button> <!--Botão para adicionar ou remover usuários, caso seja um sistema multiusuário-->
+            <button id="configuracao-sistema">Configurações do Sistema</button> <!--Botão para ajustar configurações gerais do sistema, como moeda, idioma, etc.-->
+        </div>
+    </div>
+
+</body>
+</html>

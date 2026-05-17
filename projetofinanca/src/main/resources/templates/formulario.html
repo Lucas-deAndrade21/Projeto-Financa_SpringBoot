@@ -19,6 +19,10 @@
         <label>Senha:</label>
         <input type="password" th:field="*{senha}" required />
         
+        
+        <label>Cpf:</label>
+        <input type="text" th:field="*{cpf}" required />
+
         <button type="submit" th:text="${usuario.id == null ? 'Cadastrar' : 'Salvar Alterações'}"></button>
         <a th:href="@{/usuarios/lista_usuarios}">Cancelar</a>
     </form>

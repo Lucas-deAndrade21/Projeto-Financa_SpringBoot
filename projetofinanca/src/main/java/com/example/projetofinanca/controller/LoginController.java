@@ -1,62 +1,92 @@
 package com.example.projetofinanca.controller;
 
+import com.example.projetofinanca.model.ControleSessao;
 import com.example.projetofinanca.model.Usuario;
 import com.example.projetofinanca.repository.UsuarioRepository;
-import com.example.projetofinanca.model.ControleSessao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "*")
 public class LoginController {
 
     @Autowired
     private UsuarioRepository repository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    // 1. Exibe a tela de login
-    @GetMapping("/login")
-    public String telaLogin() {
-        return "login"; // Abre o login.html
+    // Endpoint para testar se o controller está funcionando
+    @GetMapping("/login/testevivo")
+    public String teste() {
+        return "LoginController está vivo!";
     }
 
-    // 2. Processa o envio do formulário de login
+    // Endpoint de login
     @PostMapping("/login")
-    public String efetuarLogin(@RequestParam("email") String email, 
-                               @RequestParam("senha") String senha, 
-                               Model model) {
-        
-        // Busca o usuário pelo e-mail no banco (Crie esse método no seu UsuarioRepository se não tiver)
+    public Map<String, Object> efetuarLogin(@RequestBody Map<String, String> dados) {
+
+        String email = dados.get("email");
+        String senha = dados.get("senha");
+
+        Map<String, Object> resposta = new HashMap<>();
+
         Optional<Usuario> usuarioOpt = repository.findByEmail(email);
 
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
 
-            // Compara a senha digitada com a senha criptografada do banco
+            // Verifica a senha digitada com o hash armazenado
             if (encoder.matches(senha, usuario.getSenha())) {
-                
-                // MÁGICA: Guarda o usuário na nossa variável estática!
+
+                // Armazena na sessão simples da aplicação
                 ControleSessao.usuarioLogado = usuario;
-                
-                // Redireciona para a lista de usuários ou painel principal
-                return "redirect:/index"; 
+
+                resposta.put("sucesso", true);
+                resposta.put("mensagem", "Login realizado com sucesso!");
+                resposta.put("usuario", usuario);
+
+                return resposta;
             }
         }
 
-        // Se chegou aqui, é porque o e-mail ou a senha estão errados
-        model.addAttribute("erro", "Usuário ou senha inválidos!");
-        return "login";
+        resposta.put("sucesso", false);
+        resposta.put("mensagem", "Usuário ou senha inválidos.");
+
+        return resposta;
     }
 
-    // 3. Rota para fazer Logout
-    @GetMapping("/logout")
-    public String logout() {
+    // Endpoint para verificar usuário logado
+    @GetMapping("/usuario-logado")
+    public Map<String, Object> usuarioLogado() {
+
+        Map<String, Object> resposta = new HashMap<>();
+
+        if (ControleSessao.usuarioLogado != null) {
+            resposta.put("logado", true);
+            resposta.put("usuario", ControleSessao.usuarioLogado);
+        } else {
+            resposta.put("logado", false);
+            resposta.put("mensagem", "Nenhum usuário logado.");
+        }
+
+        return resposta;
+    }
+
+    // Logout
+    @PostMapping("/logout")
+    public Map<String, String> logout() {
+
         ControleSessao.encerrarSessao();
-        return "redirect:/login";
+
+        Map<String, String> resposta = new HashMap<>();
+        resposta.put("mensagem", "Logout realizado com sucesso!");
+
+        return resposta;
     }
 }

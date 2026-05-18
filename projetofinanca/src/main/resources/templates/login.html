@@ -5,46 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
 
-    <!-- CSS externo -->
     <link rel="stylesheet" href="style.css" />
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+    <link rel="javascript" href="script.js" />
 </head>
 <body>
     <div class="login-container">
-        <form class="login-form" method="post" action="/login">
-            <h1>Login</h1>
-
-            <div class="input-group">
-                <label for="email">E-mail</label>
+        <form id="loginForm">
+            <div>
+                <label for="email">E-mail:</label><br>
                 <input
                     type="email"
                     id="email"
                     name="email"
-                    placeholder="seu.email@exemplo.com"
                     required
-                />
-            </div>
+                >
             </div>
 
-            <div class="input-group">
-                <label for="senha">Senha</label>
+            <br>
+
+            <div>
+                <label for="senha">Senha:</label><br>
                 <input
                     type="password"
                     id="senha"
                     name="senha"
-                    placeholder="Digite sua senha"
                     required
-                />
+                >
             </div>
+
+            <br>
 
             <button type="submit">Entrar</button>
         </form>
-    </div>
 
-    <button class="entrar"><a href="index.html" style="color: black;">Pular</a> </button>
+        <p id="mensagem"></p>
+
+        <script src="script.js"></script>
+    </div>
 </body>
 </html>

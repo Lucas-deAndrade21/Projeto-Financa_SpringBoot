@@ -17,17 +17,27 @@ public class Meta {
     private Long id;
 
     @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
     private String descricao;
 
-    @Column(nullable = false, precision = 19, scale = 2)
+    @Column(precision = 19, scale = 2)
     private BigDecimal valorDesejado;
 
     @Column(precision = 19, scale = 2)
     private BigDecimal valorGuardado = BigDecimal.ZERO; // Começa com zero por padrão
 
+    private Integer importancia; // Gráficos: 1 (verde) até 5 (vermelho)
     private LocalDate dataLimite;
+    private LocalDate dataInicio;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categorias categoria;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
 }

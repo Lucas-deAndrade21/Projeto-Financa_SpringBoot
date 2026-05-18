@@ -6,7 +6,7 @@
     <title>Dashboard</title>
 
     <!-- CSS externo -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,17 +19,20 @@
         <div class="menu-lateral col-2">
             <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
             <ul>
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="transacao.html" class="active">Transações</a></li>
-                <li><a href="relatorio.html">Relatório</a></li>
-                <li><a href="configuracao.html">Configurações</a></li>
+                <li><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/transacoes}" class="active">Transações</a></li>
+                <li><a th:href="@{/relatorios}">Relatório</a></li>
+                <li><a th:href="@{/configuracoes}">Configurações</a></li>
             </ul>
-            <button class="sair"><a href="login.html">Sair</a></button>
+            <button class="sair"><a th:href="@{/logout}">Sair</a></button>
         </div>
         <div id="conteudo-principal" class="col-10">
             <h1>Transações</h1>
             <div id="form-gastos">
-                <form class="formulario-gasto">
+                <form class="formulario-gasto" id="formTransacao">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required />
+
                     <label for="descricao">Descrição:</label>
                     <input type="text" id="descricao" name="descricao" required />
 
@@ -41,13 +44,19 @@
 
                     <label for="data">Data:</label>
                     <input type="date" id="data" name="data" required /> <!-- Deixar data de hoje como padrão -->
+                    
+                    <label for="tipo_pagamento">Forma de Pagamento:</label>
+                    <select id="tipo_pagamento" name="tipo_pagamento" required>
+                        <option value="PIX">Pix</option>
+                        <option value="CARTAO_DEBITO">Cartão de Débito</option>
+                        <option value="CARTAO_CREDITO">Cartão de Crédito</option>
+                        <option value="DINHEIRO">Dinheiro em Espécie</option>
+                        <option value="TRANSFERENCIA">Transferência Bancária</option>
+                        <option value="DEPOSITO_BANCARIO">Depósito</option>
+                    </select>
 
                     <label for="categoria">Categoria:</label> <!--Lista gerada do BD, escolhas fixas e o cliente pode adicionar -->
-                    <select id="categoria" name="categoria">
-                        <option value="alimentacao">Alimentação</option>
-                        <option value="transporte">Transporte</option>
-                        <option value="lazer">Lazer</option>
-                    </select>
+                    <select id="categoria" name="categoria" required> </select>
                     <input type="submit" />
                 </form>
             </div>
@@ -62,52 +71,17 @@
                     <tbody>
                         <!-- Grupo: 17/05/2026 -->
                         <tr class="grupo-data">
-                            <td colspan="4">
-                                <span class="data">17/05/2026</span>
-                                <span class="total-dia">R$ 200,00</span>
-                            </td>
+                            
                         </tr>
 
                         <tr class="movimento">
-                            <td>Supermercado</td>
-                            <td>R$ 150,00</td>
-                            <td>1x</td>
-                            <td>Débito</td>
-                        </tr>
-
-                        <tr class="movimento">
-                            <td>Transporte</td>
-                            <td>R$ 50,00</td>
-                            <td>1x</td>
-                            <td>Pix</td>
-                        </tr>
-
-                        <!-- Grupo: 16/05/2026 -->
-                        <tr class="grupo-data">
-                            <td colspan="4">
-                                <span class="data">16/05/2026</span>
-                                <span class="total-dia">R$ 320,00</span>
-                            </td>
-                        </tr>
-
-                        <tr class="movimento">
-                            <td>Restaurante</td>
-                            <td>R$ 120,00</td>
-                            <td>1x</td>
-                            <td>Crédito</td>
-                        </tr>
-
-                        <tr class="movimento">
-                            <td>Farmácia</td>
-                            <td>R$ 200,00</td>
-                            <td>2x</td>
-                            <td>Crédito</td>
+                            
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
+    <script th:src="@{/js/transacao.js}"></script>
 </body>
 </html>

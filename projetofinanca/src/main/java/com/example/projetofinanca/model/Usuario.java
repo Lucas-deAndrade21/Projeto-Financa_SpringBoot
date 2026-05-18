@@ -24,5 +24,8 @@ public class Usuario {
     private String email;
 
     @Column(nullable = false)
-    private String senha;    
+    private String senha;
+    
+    @Column(nullable= true)
+    private String vencimento_cartao;
 }

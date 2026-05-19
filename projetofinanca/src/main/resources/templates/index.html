@@ -6,8 +6,7 @@
     <title>Dashboard</title>
 
     <!-- CSS externo -->
-    <link rel="stylesheet" href="style.css" />
-
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,12 +69,12 @@
         <div class="menu-lateral col-2">
             <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
             <ul>
-                <li><a href="index.html" class="active">Dashboard</a></li>
-                <li><a href="transacao.html">Transações</a></li>
-                <li><a href="relatorio.html">Relatório</a></li>
-                <li><a href="configuracao.html">Configurações</a></li>
+                <li><a th:href="@{/dashboard}" class="active">Dashboard</a></li>
+                <li><a th:href="@{/transacoes}">Transações</a></li>
+                <li><a th:href="@{/relatorios}">Relatório</a></li>
+                <li><a th:href="@{/configuracoes}">Configurações</a></li>
             </ul>
-            <button class="sair"><a href="login.html">Sair</a></button>
+            <button class="sair"><a th:href="@{/logout}">Sair</a></button>
         </div>
         <div id="conteudo-principal" class="col-10">
             <h1>Dashboard</h1>

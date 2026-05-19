@@ -5,42 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
 
-    <link rel="stylesheet" href="style.css" />
-    <link rel="javascript" href="script.js" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
     <div class="login-container">
-        <form id="loginForm">
-            <div>
-                <label for="email">E-mail:</label><br>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                >
+        <form class="login-form" id="loginForm">
+            <h1>Login</h1>
+
+            <p id="mensagemLogin" style="text-align: center; font-weight: bold;"></p>
+
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required />
             </div>
 
-            <br>
-
-            <div>
-                <label for="senha">Senha:</label><br>
-                <input
-                    type="password"
-                    id="senha"
-                    name="senha"
-                    required
-                >
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required />
             </div>
-
-            <br>
 
             <button type="submit">Entrar</button>
         </form>
-
-        <p id="mensagem"></p>
-
-        <script src="script.js"></script>
     </div>
+    <script th:src="@{/js/login.js}"></script>
 </body>
 </html>

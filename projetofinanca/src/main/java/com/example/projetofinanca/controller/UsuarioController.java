@@ -54,10 +54,4 @@ public class UsuarioController {
         return "Usuário excluído com sucesso!";
     }
 
-    // Endpoint simples para testar cadastro
-    @PostMapping("/teste-cadastro")
-    public String testeCadastro(@RequestBody Usuario usuario) {
-        service.cadastrar(usuario);
-        return "Usuário " + usuario.getNome() + " cadastrado com sucesso no Aiven!";
-    }
 }

@@ -17,11 +17,4 @@ public class Categorias {
 
     @Column(nullable = false)
     private String nome;
-
-    @Column(nullable = false)
-    private String icone; // Ex: "fa-car" (Facilita a vida do Front-end)
-
-    @Column(nullable = false)
-    private Integer importancia; // Gráficos: 1 (verde) até 5 (vermelho)
-
 }

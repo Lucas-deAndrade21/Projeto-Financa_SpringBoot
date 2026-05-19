@@ -15,7 +15,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        
         // 1. Verifica se a tabela de categorias está vazia
         if (categoriasRepository.count() == 0) {
             // 2. Loop automático que lê todos os valores de dentro do seu Enum
@@ -27,10 +26,7 @@ public class DataInitializer implements CommandLineRunner {
                 
                 // Salva fisicamente no banco do Aiven
                 categoriasRepository.save(novaCategoria);
-            }
-              
-        } else {
-            System.out.println("====== CATEGORIAS JÁ EXISTEM NO BANCO. ATIVIDADE PULADA. ======");
+            }     
         }
     }
 }

@@ -1,11 +1,14 @@
 // ==========================================
-//  EVENTO DE CADASTRO
+// EVENTO DE CADASTRO
 // ==========================================
+
 const formCadastro = document.getElementById("cadastroForm");
-const msgCadastro = document.getElementById("mensagemCadastro"); // Garanta que o ID no HTML seja este
+const msgCadastro = document.getElementById("mensagem");
 
 if (formCadastro) {
+
     formCadastro.addEventListener("submit", async (event) => {
+
         event.preventDefault();
 
         const usuario = {
@@ -16,9 +19,12 @@ if (formCadastro) {
         };
 
         try {
+
             const response = await fetch("http://localhost:8080/usuarios", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(usuario)
             });
 
@@ -28,14 +34,38 @@ if (formCadastro) {
 
             const usuarioSalvo = await response.json();
 
-            msgCadastro.style.color = "green";
-            msgCadastro.textContent = `Usuário ${usuarioSalvo.nome} cadastrado com sucesso!`;
+            msgCadastro.textContent =
+                `Cadastrado com sucesso! Volte para a tela de Login.`;
+
+            msgCadastro.style.color = "#16a34a";
+
             formCadastro.reset();
 
         } catch (error) {
-            msgCadastro.style.color = "red";
+
             msgCadastro.textContent = error.message;
+
+            msgCadastro.style.color = "#dc2626";
+
             console.error(error);
         }
+
     });
+
+const cpfInput = document.getElementById("cpf");
+
+cpfInput.addEventListener("input", () => {
+
+    let valor = cpfInput.value.replace(/\D/g, "");
+
+    valor = valor.substring(0, 11);
+
+    valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+    valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+    cpfInput.value = valor;
+
+});
+
 }

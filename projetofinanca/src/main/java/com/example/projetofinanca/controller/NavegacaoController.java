@@ -1,71 +1,73 @@
 package com.example.projetofinanca.controller;
 
-import com.example.projetofinanca.model.ControleSessao;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller // Gerencia APENAS o carregamento de páginas HTML (Thymeleaf)
+@Controller
 public class NavegacaoController {
 
-    // 1. Tela de Login
+    // Tela de Login
     @GetMapping("/login")
     public String login() {
-        return "login"; // templates/login.html
+        return "login";
     }
 
-    // 2. Tela de Cadastro de Usuário
+    // Tela de Cadastro
     @GetMapping("/cadastro")
     public String cadastro() {
-        return "cadastro"; // templates/cadastro.html
+        return "cadastro";
     }
 
-    // 3. Dashboard (Protegido por Sessão)
+    // Dashboard
     @GetMapping("/dashboard")
-    public String dashboard() {
-        if (!ControleSessao.isLogado()) {
-            return "redirect:/login"; // Expulsa se não estiver logado
+    public String dashboard(HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null) {
+            return "redirect:/login";
         }
-        return "index"; // templates/index.html
+        return "index";
     }
 
-    // 4. Tela de Transações (Protegido)
+    // Transações
     @GetMapping("/transacoes")
-    public String transacoes() {
-        if (!ControleSessao.isLogado()) {
+    public String transacoes(HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null) {
             return "redirect:/login";
         }
-        return "transacao"; // templates/transacao.html
+        return "transacao";
     }
 
-    // 5. Tela de Metas (Protegido)
+    // Metas
     @GetMapping("/metas")
-    public String metas() {
-        if (!ControleSessao.isLogado()) {
+    public String metas(HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null) {
             return "redirect:/login";
         }
-        return "meta"; // templates/meta.html
+        return "meta";
     }
 
+    // Relatórios
+    @GetMapping("/relatorios")
+    public String relatorio(HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null) {
+            return "redirect:/login";
+        }
+        return "relatorio";
+    }
+
+    // Configurações
+    @GetMapping("/configuracoes")
+    public String configuracao(HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null) {
+            return "redirect:/login";
+        }
+        return "configuracao";
+    }
+
+    // Logout
     @GetMapping("/logout")
-    public String logout() {
-        ControleSessao.encerrarSessao();
+    public String logout(HttpSession session) {
+        session.invalidate();
         return "redirect:/login";
     }
-
-    @GetMapping("/relatorios")
-    public String relatorio() {
-        if (!ControleSessao.isLogado()) {
-            return "redirect:/login";
-        }
-        return "relatorio"; // templates/relatorio.html
-    }
-
-    @GetMapping("/configuracoes")
-    public String configuracao() {
-        if (!ControleSessao.isLogado()) {
-            return "redirect:/login";
-        }
-        return "configuracao"; // templates/configuracao.html
-    }
-
 }

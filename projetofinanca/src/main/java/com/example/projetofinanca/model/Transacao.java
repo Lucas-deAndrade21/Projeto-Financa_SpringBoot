@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
 import com.example.projetofinanca.model.enums.*;
 
 @Entity
@@ -45,4 +46,12 @@ public class Transacao {
     @ManyToOne // Relacionamento: Muitas transações pertencem a um usuário
     @JoinColumn(name = "usuario_id") // Nome da coluna da chave estrangeira no banco
     private Usuario usuario;
+
+    public void setCategoria(Categorias semCategoria) {
+        if (semCategoria == null) {
+            this.categoria = null;
+        } else {
+            this.categoria = semCategoria;
+        }
+    }
 }

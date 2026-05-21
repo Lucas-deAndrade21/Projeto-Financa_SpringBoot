@@ -1,25 +1,405 @@
-// ===============================
-// DASHBOARD - MoneyLens
-// ===============================
+google.charts.load("current", {
+    packages: ["corechart"]
+});
 
-google.charts.load("current", { packages: ["corechart"] });
-google.charts.setOnLoadCallback(inicializarDashboard);
+google.charts.setOnLoadCallback(
+    inicializarDashboard
+);
+
 
 // ===============================
 // INICIALIZAÇÃO
 // ===============================
 async function inicializarDashboard() {
+
     try {
+
         const transacoes = await buscarTransacoes();
+
         const transacoesFiltradas = aplicarFiltroPeriodo(transacoes);
 
-        atualizarCardDespesas(transacoesFiltradas);
-        desenharGraficoCategoria(transacoesFiltradas);
-        desenharGraficoTipoPagamento(transacoesFiltradas);
+        // APENAS DESPESAS
+        const despesas =
+            transacoesFiltradas.filter(
+                t => t.tipo_transacao === "DESPESA"
+        );
+
+        atualizarResumoFinanceiro(transacoesFiltradas);
+
+        atualizarTopCategoria(despesas);
+
+        atualizarPagamentoMaisUsado(despesas);
+
+        atualizarMaiorGastoDiario(despesas);
+
+        atualizarQuantidadeTransacoes(transacoesFiltradas);
+
+        desenharGraficoCategoria(despesas);
+
+        desenharGraficoTipoPagamento(despesas);
+
+        atualizarUltimasTransacoes(transacoesFiltradas);
+
+        atualizarTicketMedio(transacoesFiltradas);
+
+        atualizarMaiorReceitaDia(transacoesFiltradas);
 
     } catch (error) {
-        console.error("Erro ao carregar dashboard:", error);
+
+        console.error(
+            "Erro ao carregar dashboard:",
+            error
+        );
     }
+}
+
+function atualizarUltimasTransacoes(transacoes) {
+
+    const container =
+        document.getElementById("ultimas-transacoes");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const ultimas = [...transacoes]
+
+        .sort((a, b) => b.id - a.id)
+
+        .slice(0, 5);
+
+    if (ultimas.length === 0) {
+
+        container.innerHTML =
+            "<p>Nenhuma transação encontrada.</p>";
+
+        return;
+    }
+
+    ultimas.forEach(t => {
+
+        const div = document.createElement("div");
+
+        div.className = "transacao-item";
+
+        const classe =
+            t.tipo_transacao === "RECEITA"
+                ? "receita"
+                : "despesa";
+
+        div.innerHTML = `
+            <div class="transacao-info">
+                <strong>${t.nome}</strong>
+                <span>${formatarData(t.data)}</span>
+            </div>
+
+            <div class="transacao-valor ${classe}">
+                ${formatarMoeda(Number(t.valor))}
+            </div>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+function atualizarTicketMedio(transacoes) {
+
+    if (transacoes.length === 0) {
+
+        atualizarTexto(
+            "ticket-medio",
+            "R$ 0,00"
+        );
+
+        return;
+    }
+
+    const total = transacoes.reduce(
+        (soma, t) => soma + Number(t.valor || 0),
+        0
+    );
+
+    const media =
+        total / transacoes.length;
+
+    atualizarTexto(
+        "ticket-medio",
+        formatarMoeda(media)
+    );
+}
+
+function atualizarMaiorReceitaDia(transacoes) {
+
+    const receitasPorDia = {};
+
+    transacoes
+        .filter(t => t.tipo_transacao === "RECEITA")
+        .forEach(t => {
+
+            const data = t.data;
+
+            receitasPorDia[data] =
+                (receitasPorDia[data] || 0)
+                + Number(t.valor || 0);
+        });
+
+    let maiorDia = "-";
+    let maiorValor = 0;
+
+    for (const dia in receitasPorDia) {
+
+        if (receitasPorDia[dia] > maiorValor) {
+
+            maiorValor = receitasPorDia[dia];
+
+            maiorDia =
+                `${formatarData(dia)} (${formatarMoeda(maiorValor)})`;
+        }
+    }
+
+    atualizarTexto(
+        "maior-receita-dia",
+        maiorDia
+    );
+}
+
+function atualizarTopCategoria(transacoes) {
+
+    const categorias = {};
+
+    transacoes
+        .filter(t => t.tipo_transacao === "DESPESA")
+        .forEach(t => {
+
+            const nome =
+                t.categoria?.nome || "Sem Categoria";
+
+            categorias[nome] =
+                (categorias[nome] || 0)
+                + Number(t.valor || 0);
+        });
+
+    let topCategoria = "-";
+    let maiorValor = 0;
+
+    for (const categoria in categorias) {
+
+        if (categorias[categoria] > maiorValor) {
+
+            maiorValor = categorias[categoria];
+
+            topCategoria = `${formatarCategoria(categoria)} (${formatarMoeda(maiorValor)})`;
+        }
+    }
+
+    document.getElementById("top-categoria")
+        .textContent = topCategoria;
+}
+
+function atualizarPagamentoMaisUsado(transacoes) {
+
+    const pagamentos = {};
+
+    transacoes.forEach(t => {
+
+        const tipo = traduzirTipoPagamento(t.tipo_pagamento);
+
+        pagamentos[tipo] = (pagamentos[tipo] || 0) + 1;
+    });
+
+    let maiorQuantidade = 0;
+
+    Object.values(pagamentos).forEach(qtd => {
+
+        if (qtd > maiorQuantidade) {
+            maiorQuantidade = qtd;
+        }
+    });
+
+    const maisUsados =
+        Object.entries(pagamentos).filter(([_, qtd]) => qtd === maiorQuantidade).map(([tipo]) => tipo);
+
+    const texto = `${maisUsados.join(", ")} (${maiorQuantidade}x)`;
+
+    document.getElementById("top-pagamento").textContent = texto;
+}
+
+function atualizarMaiorGastoDiario(transacoes) {
+
+    const gastosPorDia = {};
+
+    transacoes
+        .filter(t => t.tipo_transacao === "DESPESA")
+        .forEach(t => {
+
+            const data = t.data;
+
+            gastosPorDia[data] =
+                (gastosPorDia[data] || 0)
+                + Number(t.valor || 0);
+        });
+
+    let maiorDia = "-";
+    let maiorValor = 0;
+
+    for (const dia in gastosPorDia) {
+
+        if (gastosPorDia[dia] > maiorValor) {
+
+            maiorValor = gastosPorDia[dia];
+
+            maiorDia = `${formatarData(dia)} (${formatarMoeda(maiorValor)})`;
+        }
+    }
+
+    document.getElementById("maior-gasto-dia")
+        .textContent = maiorDia;
+}
+
+
+function atualizarQuantidadeTransacoes(transacoes) {
+    document.getElementById("quantidade-transacoes").textContent = transacoes.length;
+}
+
+// ===============================
+// RESUMO FINANCEIRO
+// ===============================
+function atualizarResumoFinanceiro(transacoes) {
+
+    let receitas = 0;
+    let despesas = 0;
+
+    transacoes.forEach(transacao => {
+
+        const valor = Number(transacao.valor || 0);
+
+        if (transacao.tipo_transacao === "RECEITA") {
+            receitas += valor;
+        }
+
+        if (transacao.tipo_transacao === "DESPESA") {
+            despesas += valor;
+        }
+    });
+
+    const saldo = receitas - despesas;
+
+    // KPIs
+    document.getElementById("renda-mensal").textContent = formatarMoeda(receitas);
+
+    document.getElementById("despesa-total").textContent = formatarMoeda(despesas);
+
+    document.getElementById("saldo-atual").textContent = formatarMoeda(saldo);
+
+    document.getElementById("quantidade-transacoes").textContent =transacoes.length;
+}
+
+// ===============================
+// ATUALIZAR TEXTO COM SEGURANÇA
+// ===============================
+function atualizarTexto(id, valor) {
+
+    const elemento =
+        document.getElementById(id);
+
+    if (elemento) {
+        elemento.textContent = valor;
+    }
+}
+
+// ===============================
+// INSIGHTS DO DASHBOARD
+// ===============================
+function atualizarInsights(transacoes) {
+
+    // =========================
+    // TOP CATEGORIA
+    // =========================
+    const categorias = {};
+
+    transacoes.forEach(t => {
+
+        if (t.tipo_transacao !== "DESPESA") return;
+
+        const nome =
+            t.categoria?.nome || "Sem Categoria";
+
+        categorias[nome] =
+            (categorias[nome] || 0) + Number(t.valor);
+    });
+
+    let topCategoria = "-";
+    let maiorValorCategoria = 0;
+
+    Object.entries(categorias).forEach(([nome, valor]) => {
+
+        if (valor > maiorValorCategoria) {
+            maiorValorCategoria = valor;
+            topCategoria = nome;
+        }
+    });
+
+    document.getElementById("top-categoria").textContent = topCategoria;
+
+    // =========================
+    // MÉTODO MAIS USADO
+    // =========================
+    const pagamentos = {};
+
+    transacoes.forEach(t => {
+
+        const tipo =
+            traduzirTipoPagamento(t.tipo_pagamento);
+
+        pagamentos[tipo] =
+            (pagamentos[tipo] || 0) + 1;
+    });
+
+    let topPagamento = "-";
+    let maiorUso = 0;
+
+    Object.entries(pagamentos).forEach(([tipo, qtd]) => {
+
+        if (qtd > maiorUso) {
+            maiorUso = qtd;
+            topPagamento = tipo;
+        }
+    });
+
+    document.getElementById("top-pagamento").textContent = topPagamento;
+
+    // =========================
+    // DIA COM MAIOR GASTO
+    // =========================
+    const gastosPorDia = {};
+
+    transacoes.forEach(t => {
+
+        if (t.tipo_transacao !== "DESPESA") return;
+
+        const data = t.data;
+
+        gastosPorDia[data] =
+            (gastosPorDia[data] || 0)
+            + Number(t.valor);
+    });
+
+    maiorDia = `${formatarData(dia)} (${formatarMoeda(maiorValor)})`;
+    let maiorValorDia = 0;
+
+    Object.entries(gastosPorDia).forEach(([dia, valor]) => {
+
+        if (valor > maiorValorDia) {
+
+            maiorValorDia = valor;
+
+            maiorDia =
+                `${dia} (${formatarMoeda(valor)})`;
+        }
+    });
+
+    document.getElementById("maior-gasto-dia")
+        .textContent = maiorDia;
 }
 
 // ===============================
@@ -60,8 +440,7 @@ function aplicarFiltroPeriodo(transacoes) {
         if (periodo === "mensal") {
 
             return (
-                data.getMonth() === hoje.getMonth() &&
-                data.getFullYear() === hoje.getFullYear()
+                data.getMonth() === hoje.getMonth() && data.getFullYear() === hoje.getFullYear()
             );
         }
 
@@ -78,11 +457,9 @@ function aplicarFiltroPeriodo(transacoes) {
         // =========================
         if (periodo === "personalizado") {
 
-            const dataInicial =
-                document.getElementById("data-inicial").value;
+            const dataInicial = document.getElementById("data-inicial").value;
 
-            const dataFinal =
-                document.getElementById("data-final").value;
+            const dataFinal = document.getElementById("data-final").value;
 
             // Se não escolher as duas datas,
             // mostra tudo
@@ -106,11 +483,26 @@ function aplicarFiltroPeriodo(transacoes) {
 // ===============================
 // FORMATA MOEDA
 // ===============================
+
+function formatarData(dataString) {
+
+    const [ano, mes, dia] = dataString.split("-");
+
+    return `${dia}/${mes}/${ano}`;
+}
+
 function formatarMoeda(valor) {
     return valor.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
     });
+}
+
+function formatarCategoria(nome) {
+
+    if (!nome) return "";
+
+    return nome.toLowerCase().replace("_", " ").replace(/\b\w/g, letra => letra.toUpperCase());
 }
 
 // ===============================
@@ -127,18 +519,6 @@ function traduzirTipoPagamento(tipo) {
     };
 
     return mapa[tipo] || tipo;
-}
-
-// ===============================
-// CARD DESPESAS
-// ===============================
-function atualizarCardDespesas(transacoes) {
-    const total = transacoes.reduce((soma, t) => {
-        return soma + Number(t.valor || 0);
-    }, 0);
-
-    document.getElementById("despesa-total").textContent =
-        formatarMoeda(total);
 }
 
 // ===============================
@@ -166,10 +546,7 @@ function agruparPor(transacoes, callback) {
 // GRÁFICO POR CATEGORIA
 // ===============================
 function desenharGraficoCategoria(transacoes) {
-    const agrupado = agruparPor(
-        transacoes,
-        t => t.categoria?.nome || "Sem Categoria"
-    );
+    const agrupado = agruparPor(transacoes,t => t.categoria?.nome || "Sem Categoria");
 
     const dados = [["Categoria", "Valor"]];
 
@@ -283,3 +660,4 @@ selectPeriodo.addEventListener("change", () => {
 // ATUALIZA DASHBOARD AO TROCAR DATA
 dataInicial.addEventListener("change", inicializarDashboard);
 dataFinal.addEventListener("change", inicializarDashboard);
+window.addEventListener("resize",inicializarDashboard);

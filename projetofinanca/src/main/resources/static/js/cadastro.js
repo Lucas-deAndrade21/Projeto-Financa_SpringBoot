@@ -19,7 +19,9 @@ if (formCadastro) {
         };
 
         try {
-
+            // =========================
+            // CADASTRAR USUÁRIO
+            // =========================
             const response = await fetch("http://localhost:8080/usuarios", {
                 method: "POST",
                 headers: {
@@ -32,12 +34,42 @@ if (formCadastro) {
                 throw new Error("Erro ao cadastrar usuário.");
             }
 
-            const usuarioSalvo = await response.json();
+            // =========================
+            // LOGIN AUTOMÁTICO
+            // =========================
+            const loginResponse = await fetch("http://localhost:8080/login", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: usuario.email,
+                    senha: usuario.senha
+                })
+            });
 
+            if (!loginResponse.ok) {
+                throw new Error("Usuário cadastrado, mas erro ao fazer login.");
+            }
+
+            const resultadoLogin = await loginResponse.json();
+
+            if (!resultadoLogin.sucesso) {
+                throw new Error("Usuário cadastrado, mas login falhou.");
+            }
+
+            // =========================
+            // SUCESSO
+            // =========================
             msgCadastro.textContent =
-                `Cadastrado com sucesso! Volte para a tela de Login.`;
+                "Cadastro realizado com sucesso!";
 
             msgCadastro.style.color = "#16a34a";
+
+            setTimeout(() => {
+                window.location.href = "/dashboard";
+            }, 1000);
 
             formCadastro.reset();
 

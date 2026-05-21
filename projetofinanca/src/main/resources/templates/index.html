@@ -18,49 +18,6 @@
 
     <!-- Google Charts -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {packages: ['corechart']});
-        google.charts.setOnLoadCallback(drawCharts);
-
-        function drawCharts() {
-            var data_1 = google.visualization.arrayToDataTable([
-                ['Categoria', 'Valor'],
-                ['Alimentação', 500],
-                ['Transporte', 300],
-                ['Lazer', 200],
-                ['Saúde', 100]
-            ]);
-            
-            var options_1 = {
-                pieHole: 0.4,
-                backgroundColor: 'transparent',
-                width: 420,
-                height: 280,
-                legend: { position: 'right', textStyle: { fontSize: 12 } },
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('pizza-gasto-por-categoria'));
-            chart.draw(data_1, options_1);
-
-            var data_2 = google.visualization.arrayToDataTable([
-                ['Tipo de Pagamento', 'Valor'],
-                ['Crédito', 400],
-                ['Débito', 300],
-                ['Assinatura', 200]
-            ]);
-
-            var options_2 = {
-                pieHole: 0.4,
-                backgroundColor: 'transparent',
-                width: 420,
-                height: 280,
-                legend: { position: 'right', textStyle: { fontSize: 12 } },
-            };
-
-            var chart2 = new google.visualization.PieChart(document.getElementById('pizza-gasto-por-tipo-pagamento'));
-            chart2.draw(data_2, options_2);
-        }
-    </script>
 
 </head>
 <body>
@@ -101,50 +58,90 @@
                 </div>
             
                 <div class="dashboard">
-                    <div id="big-numbers" class="nested-grid col-12">
-                        <div id="salario-despesa" class="col-4">
-                            <div id="card-1" class="card">
-                                <h4>Renda Mensal</h4>
-                                <p id="renda-mensal">R$ 5.000,00</p>
-                            </div>
-                            <div id="card-2" class="card">
-                                <h4>Despesas</h4>
-                                <p id="despesa-total"></p>
-                            </div>
-                        </div>
-                        <div id="graficos-pizza" class="col-8">
-                            <div id="card-3" class="card">
-                                <h4>Gastos por Categoria</h4>
-                                <div id="pizza-gasto-por-categoria" style="margin-top: -60px; margin-left: -20px;"></div>
-                            </div>
-                            <div id="card-4" class="card">
-                                <h4>Gastos por Tipo de Pagamento</h4>
-                                <div id="pizza-gasto-por-tipo-pagamento" style="margin-top: -60px; margin-left: -20px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="top-3-categorias" class="nested-grid col-12">
-                        <div id="card-5" class="card col-6">
+                    <!-- KPIs -->
+                    <div class="kpi-grid">
+
+                        <div class="card kpi-card saldo">
                             <h4>Saldo Atual</h4>
-                            </br>
-                            <p>R$ 5.000,00</p>
+                            <p id="saldo-atual">R$ 0,00</p>
                         </div>
-                        <div id="card-6" class="card col-6">
-                            <h4>Despesas Mensais</h4>
-                            </br>
-                            <p>R$ 2.000,00</p>
+
+                        <div class="card kpi-card receita">
+                            <h4>Receitas</h4>
+                            <p id="renda-mensal">R$ 0,00</p>
                         </div>
-                        <div id="card-7" class="card col-6">
-                            <h4>Receitas Mensais</h4>
-                            </br>
-                            <p>R$ 7.000,00</p>
+
+                        <div class="card kpi-card despesa">
+                            <h4>Despesas</h4>
+                            <p id="despesa-total">R$ 0,00</p>
                         </div>
-                        <div id="card-8" class="card col-6">
-                            <h4>Transações Pendentes</h4>
-                            </br>
-                            <p>3</p>
+
+                        <div class="card kpi-card transacoes">
+                            <h4>Transações</h4>
+                            <p id="quantidade-transacoes">0</p>
+                        </div>
+
+                    </div>
+
+                    <!-- GRÁFICOS -->
+                    <div class="graficos-grid">
+
+                        <div class="card grafico-card">
+                            <h4>Gastos por Categoria</h4>
+
+                            <div id="pizza-gasto-por-categoria"></div>
+                        </div>
+
+                        <div class="card grafico-card">
+                            <h4>Tipo de Pagamento</h4>
+
+                            <div id="pizza-gasto-por-tipo-pagamento"></div>
+                        </div>
+
+                    </div>
+
+                    <!-- INSIGHTS -->
+                    <div class="analytics-grid">
+
+                        <!-- LINHA 1 -->
+                        <div class="card analytics-card">
+                            <h4>Últimas Transações</h4>
+
+                            <div id="ultimas-transacoes"></div>
+                        </div>
+
+                        <div class="card analytics-card">
+                            <h4>Média por Transação</h4>
+
+                            <p id="ticket-medio">R$ 0,00</p>
+                        </div>
+
+                        <div class="card analytics-card">
+                            <h4>Maior Receita Diária</h4>
+
+                            <p id="maior-receita-dia">-</p>
+                        </div>
+
+                        <!-- LINHA 2 -->
+                        <div class="card analytics-card">
+                            <h4>Top Categoria</h4>
+
+                            <p id="top-categoria">-</p>
+                        </div>
+
+                        <div class="card analytics-card">
+                            <h4>Pagamento Mais Usado</h4>
+
+                            <p id="top-pagamento">-</p>
+                        </div>
+
+                        <div class="card analytics-card">
+                            <h4>Maior Gasto Diário</h4>
+
+                            <p id="maior-gasto-dia">-</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -64,17 +64,13 @@ if (formTransacao) {
         const novaTransacao = {
             nome: document.getElementById("nome").value,
             descricao: document.getElementById("descricao").value,
-            valor: parseFloat(document.getElementById("valor").value),
-            parcela:
-                parseInt(document.getElementById("parcela").value) || 1,
+            valor: parseFloat(document.getElementById("valor").value.replace(/\./g, "").replace(",", ".")),
+            parcela:parseInt(document.getElementById("parcela").value) || 1,
             data: document.getElementById("data").value,
-            tipo_transacao: "DESPESA",
-            tipo_pagamento:
-                document.getElementById("tipo_pagamento").value,
+            tipo_transacao: document.getElementById("tipoTransacao").value,
+            tipo_pagamento:document.getElementById("tipo_pagamento").value,
             categoria: {
-                id: parseInt(
-                    document.getElementById("categoria").value
-                )
+                id: parseInt(document.getElementById("categoria").value)
             }
         };
 

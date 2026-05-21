@@ -59,20 +59,20 @@
             </button>
 
             <div class="accordion-body">
-                <form>
+                <form id="formAlterarSenha">
                     <div class="input-group">
                         <label>Senha Atual</label>
-                        <input type="password">
+                        <input type="password" id="senhaAtual" required>
                     </div>
 
                     <div class="input-group">
                         <label>Nova Senha</label>
-                        <input type="password">
+                        <input type="password" id="novaSenha" required>
                     </div>
 
                     <div class="input-group">
                         <label>Confirmar Nova Senha</label>
-                        <input type="password">
+                        <input type="password" id="confirmarSenha" required>
                     </div>
 
                     <button type="submit" class="config-btn">
@@ -93,7 +93,7 @@
                 <form>
                     <div class="input-group">
                         <label>Dia do vencimento</label>
-                        <input type="number" min="1" max="31" placeholder="Ex.: 10">
+                        <input type="number" min="1" max="31" placeholder="Ex.: 10" id="diaVencimento" required>
                     </div>
 
                     <button type="submit" class="config-btn">
@@ -134,12 +134,7 @@
 
             <div class="input-group">
                 <label for="metaNome">Nome da Meta</label>
-                <input
-                    type="text"
-                    id="metaNome"
-                    placeholder="Ex.: Viagem para o Japão"
-                    required
-                />
+                <input type="text" id="metaNome" placeholder="Ex.: Viagem para o Japão" required/>
             </div>
 
             <div class="input-group">
@@ -237,6 +232,10 @@
     </div>
 </div>
 
+<script th:src="@{/js/modals.js}"></script>
+<script th:src="@{/js/categorias.js}"></script>
+<script th:src="@{/js/senha.js}"></script>
+<script th:src="@{/js/metas.js}"></script>
 <script th:src="@{/js/configuracao.js}"></script>
 
 </body>

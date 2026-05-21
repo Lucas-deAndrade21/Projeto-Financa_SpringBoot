@@ -1,10 +1,11 @@
 // ==========================================
 // MODAIS
 // ==========================================
+
 function abrirModal(id) {
+
     document.getElementById(id).style.display = "flex";
 
-    // Sempre recarrega categorias ao abrir modal
     if (id === "modalCategorias") {
         carregarCategorias();
     }
@@ -15,7 +16,9 @@ function fecharModal(id) {
 }
 
 window.onclick = function(event) {
+
     document.querySelectorAll(".modal").forEach(modal => {
+
         if (event.target === modal) {
             modal.style.display = "none";
         }
@@ -23,12 +26,14 @@ window.onclick = function(event) {
 };
 
 function toggleAccordion(element) {
+
     const item = element.parentElement;
+
     item.classList.toggle("active");
 }
 
 // ==========================================
-// CONFIG API
+// CATEGORIAS
 // ==========================================
 const API_CATEGORIAS = "/api/categorias";
 
@@ -36,7 +41,7 @@ const categoriasBox =
     document.querySelector(".categorias-box");
 
 // ==========================================
-// BUSCAR CATEGORIAS
+// BUSCAR
 // ==========================================
 async function carregarCategorias() {
 
@@ -52,7 +57,7 @@ async function carregarCategorias() {
         }
 
         if (!response.ok) {
-            throw new Error("Erro ao buscar categorias.");
+            throw new Error();
         }
 
         const categorias = await response.json();
@@ -60,12 +65,13 @@ async function carregarCategorias() {
         renderizarCategorias(categorias);
 
     } catch (error) {
+
         console.error(error);
     }
 }
 
 // ==========================================
-// RENDERIZAR CHIPS
+// RENDER
 // ==========================================
 function renderizarCategorias(categorias) {
 
@@ -73,9 +79,8 @@ function renderizarCategorias(categorias) {
 
     if (categorias.length === 0) {
 
-        categoriasBox.innerHTML = `
-            <p>Nenhuma categoria cadastrada.</p>
-        `;
+        categoriasBox.innerHTML =
+            `<p>Nenhuma categoria cadastrada.</p>`;
 
         return;
     }
@@ -86,8 +91,8 @@ function renderizarCategorias(categorias) {
 
         chip.className = "categoria-chip";
 
-        // categorias globais = sem botão excluir
-        const podeExcluir = categoria.usuario !== null;
+        const podeExcluir =
+            categoria.usuario !== null;
 
         chip.innerHTML = `
             ${formatarNomeCategoria(categoria.nome)}
@@ -111,13 +116,12 @@ function renderizarCategorias(categorias) {
 }
 
 // ==========================================
-// CRIAR CATEGORIA
+// CRIAR
 // ==========================================
 async function abrirNovaCategoria() {
 
-    const nome = prompt(
-        "Digite o nome da nova categoria:"
-    );
+    const nome =
+        prompt("Digite o nome da nova categoria:");
 
     if (!nome || !nome.trim()) {
         return;
@@ -140,14 +144,8 @@ async function abrirNovaCategoria() {
             })
         });
 
-        if (response.status === 401) {
-            alert("Sessão expirada.");
-            window.location.href = "/login";
-            return;
-        }
-
         if (!response.ok) {
-            throw new Error("Erro ao salvar categoria.");
+            throw new Error();
         }
 
         await carregarCategorias();
@@ -160,10 +158,13 @@ async function abrirNovaCategoria() {
     }
 }
 
+// ==========================================
+// DELETE
+// ==========================================
 async function deletarCategoria(id) {
 
     const confirmar = confirm(
-        "As transações dessa categoria serão movidas para 'Sem Categoria'. Deseja continuar?"
+        "As transações serão movidas para 'Sem Categoria'."
     );
 
     if (!confirmar) return;
@@ -177,16 +178,6 @@ async function deletarCategoria(id) {
                 credentials: "include"
             }
         );
-
-        if (response.status === 401) {
-            alert("Falha ao excluir.");
-            return;
-        }
-
-        if (response.status === 403) {
-            alert("Você não pode excluir essa categoria.");
-            return;
-        }
 
         if (!response.ok) {
             throw new Error();
@@ -205,14 +196,87 @@ async function deletarCategoria(id) {
 }
 
 // ==========================================
-// FORMATAR NOME
+// FORMATAR
 // ==========================================
 function formatarNomeCategoria(nome) {
 
     if (!nome) return "";
 
-    return nome.charAt(0).toUpperCase() +
-           nome.slice(1).toLowerCase();
+    return nome.charAt(0).toUpperCase() +nome.slice(1).toLowerCase();
+}
+
+// ==========================================
+// ALTERAR SENHA
+// ==========================================
+const formAlterarSenha =
+    document.getElementById("formAlterarSenha");
+
+if (formAlterarSenha) {
+
+    formAlterarSenha.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            const senhaAtual =
+                document.getElementById("senhaAtual").value;
+
+            const novaSenha =
+                document.getElementById("novaSenha").value;
+
+            const confirmarSenha =
+                document.getElementById("confirmarSenha").value;
+
+            if (novaSenha !== confirmarSenha) {
+                alert("As senhas não coincidem.");
+                return;
+            }
+
+            if (novaSenha.length < 6) {
+                alert("Senha muito curta.");
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    "/api/usuarios/alterar-senha",
+                    {
+                        method: "PUT",
+
+                        credentials: "include",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            senhaAtual,
+                            novaSenha
+                        })
+                    }
+                );
+
+                const mensagem =
+                    await response.text();
+
+                if (!response.ok) {
+                    throw new Error(mensagem);
+                }
+
+                alert("Senha alterada!");
+
+                formAlterarSenha.reset();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(error.message);
+            }
+        }
+    );
 }
 
 // ==========================================
@@ -225,25 +289,29 @@ function editarMeta(botao) {
     const colunas = linha.querySelectorAll("td");
 
     const nome = colunas[0].textContent.trim();
-    const dataLimite = colunas[1].textContent.trim();
-    const progresso = colunas[2].textContent.trim();
+
+    const dataLimite =colunas[1].textContent.trim();
+
+    const progresso =colunas[2].textContent.trim();
 
     const partes = progresso.split("|");
 
-    const valorDesejado =
-        partes.length > 1 ? partes[1] : "";
+    const valorDesejado =partes.length > 1 ? partes[1] : "";
 
-    document.getElementById("metaNome").value = nome;
+    document.getElementById("metaNome").value =nome;
 
-    document.getElementById("metaDataLimite").value =
-        dataLimite;
+    document.getElementById("metaDataLimite").value =dataLimite;
 
-    document.getElementById("metaValorDesejado").value =
-        valorDesejado;
+    document.getElementById("metaValorDesejado").value =valorDesejado;
 }
 
 // ==========================================
 // INIT
+// ==========================================
+
+
+// ==========================================
+// CARREGAR CATEGORIAS
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     carregarCategorias();

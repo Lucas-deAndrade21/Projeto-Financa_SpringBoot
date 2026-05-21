@@ -13,7 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+    origins = "http://localhost:8080",
+    allowCredentials = "true"
+)
 public class LoginController {
 
     @Autowired

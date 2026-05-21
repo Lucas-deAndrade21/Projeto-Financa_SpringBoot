@@ -87,6 +87,18 @@
                         <option value="personalizado">Personalizado</option> <!--Opção para escolher um período específico -->
                     </select>
                 </div>
+
+                <div id="filtro-personalizado" style="display: none; gap: 10px; align-items: center; margin-top: 10px;">
+                    <div>
+                        <label for="data-inicial">De:</label>
+                        <input type="date" id="data-inicial">
+                    </div>
+
+                    <div>
+                        <label for="data-final">Até:</label>
+                        <input type="date" id="data-final">
+                    </div>
+                </div>
             
                 <div class="dashboard">
                     <div id="big-numbers" class="nested-grid col-12">
@@ -97,7 +109,7 @@
                             </div>
                             <div id="card-2" class="card">
                                 <h4>Despesas</h4>
-                                <p id="despesa-total">R$ 3.000,00</p>
+                                <p id="despesa-total"></p>
                             </div>
                         </div>
                         <div id="graficos-pizza" class="col-8">
@@ -137,6 +149,8 @@
             </div>
         </div>
     </div>
+
+    <script th:src="@{/js/index.js}"></script>
 
 </body>
 </html>

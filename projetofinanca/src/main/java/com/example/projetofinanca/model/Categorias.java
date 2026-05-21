@@ -1,4 +1,5 @@
 package com.example.projetofinanca.model;
+
 import jakarta.persistence.*;
 import lombok.Data; 
 import lombok.NoArgsConstructor;
@@ -17,4 +18,8 @@ public class Categorias {
 
     @Column(nullable = false)
     private String nome;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = true) 
+    private Usuario usuario;
 }

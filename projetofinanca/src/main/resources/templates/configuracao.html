@@ -3,39 +3,241 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
+    <title>Configurações</title>
 
-    <!-- CSS externo -->
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <div class="menu-lateral col-2">
-            <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
-            <ul>
-                <li><a th:href="@{/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/transacoes}">Transações</a></li>
-                <li><a th:href="@{/relatorios}">Relatório</a></li>
-                <li><a th:href="@{/configuracoes}" class="active">Configurações</a></li>
-            </ul>
-            <button class="sair"><a th:href="@{/logout}">Sair</a></button>
-        </div>
-        <div id="conteudo-principal" class="col-10">
-            <h1>Configurações</h1>
-            <button id="editar-perfil">Editar Perfil</button> <!--Botão para editar as informações do perfil do usuário-->
-            <button id="gerenciar-categorias">Categorias</button> <!--Botão para adicionar, editar ou excluir categorias de gastos-->
-            <button id="gerenciar-metas">Metas</button> <!--Botão para definir metas de gastos e acompanhar o progresso-->
-            <!-- Funcionalidade do Admin -->
-            <button id="gerenciar-usuarios">Usuários</button> <!--Botão para adicionar ou remover usuários, caso seja um sistema multiusuário-->
-            <button id="configuracao-sistema">Configurações do Sistema</button> <!--Botão para ajustar configurações gerais do sistema, como moeda, idioma, etc.-->
+<div class="container">
+    <div class="menu-lateral col-2">
+        <h2 class="cherry-bomb-one-regular">MoneyLens</h2>
+        <ul>
+            <li><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/transacoes}">Transações</a></li>
+            <li><a th:href="@{/relatorios}">Relatório</a></li>
+            <li><a th:href="@{/configuracoes}" class="active">Configurações</a></li>
+        </ul>
+        <button class="sair">
+            <a th:href="@{/logout}">Sair</a>
+        </button>
+    </div>
+
+    <div id="conteudo-principal" class="col-10">
+        <h1>Configurações</h1>
+
+        <div class="configuracoes-container">
+            <button class="config-btn" onclick="abrirModal('modalPerfil')">
+                Editar Perfil
+            </button>
+
+            <button class="config-btn" onclick="abrirModal('modalCategorias')">
+                Categorias
+            </button>
+
+            <button class="config-btn" onclick="abrirModal('modalMetas')">
+                Metas
+            </button>
         </div>
     </div>
+</div>
+
+<!-- Modal Editar Perfil -->
+<div id="modalPerfil" class="modal">
+    <div class="modal-content">
+        <span class="fechar" onclick="fecharModal('modalPerfil')">&times;</span>
+        <h2>Editar Perfil</h2>
+        <!-- Item 1 -->
+        <div class="accordion-item">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Alterar Senha</span>
+                <span class="accordion-icon">▼</span>
+            </button>
+
+            <div class="accordion-body">
+                <form>
+                    <div class="input-group">
+                        <label>Senha Atual</label>
+                        <input type="password">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Nova Senha</label>
+                        <input type="password">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Confirmar Nova Senha</label>
+                        <input type="password">
+                    </div>
+
+                    <button type="submit" class="config-btn">
+                        Salvar Senha
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="accordion-item">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Dia de Vencimento do Cartão</span>
+                <span class="accordion-icon">▼</span>
+            </button>
+
+            <div class="accordion-body">
+                <form>
+                    <div class="input-group">
+                        <label>Dia do vencimento</label>
+                        <input type="number" min="1" max="31" placeholder="Ex.: 10">
+                    </div>
+
+                    <button type="submit" class="config-btn">
+                        Salvar Data
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Categorias -->
+<div id="modalCategorias" class="modal">
+    <div class="modal-content">
+        <span class="fechar" onclick="fecharModal('modalCategorias')">&times;</span>
+        <h2>Categorias</h2>
+        <p>Adicione ou remova categorias personalizadas.</p>
+
+        <div class="categorias-box" id="categoriasBox"></div>
+
+        <div class="categorias-acoes">
+            <button class="nova-categoria-btn" onclick="abrirNovaCategoria()">
+                + Nova Categoria
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Metas -->
+<div id="modalMetas" class="modal">
+    <div class="modal-content">
+        <span class="fechar" onclick="fecharModal('modalMetas')">&times;</span>
+        <h2>Metas</h2>
+        <p>Cadastre e acompanhe seus objetivos financeiros.</p>
+
+        <!-- FORMULÁRIO -->
+        <form class="meta-form">
+
+            <div class="input-group">
+                <label for="metaNome">Nome da Meta</label>
+                <input
+                    type="text"
+                    id="metaNome"
+                    placeholder="Ex.: Viagem para o Japão"
+                    required
+                />
+            </div>
+
+            <div class="input-group">
+                <label for="metaDescricao">Descrição</label>
+                <input
+                    type="text"
+                    id="metaDescricao"
+                    placeholder="Ex.: Economizar para passagem e hospedagem"
+                    required
+                />
+            </div>
+
+            <div class="meta-grid">
+
+                <div class="input-group">
+                    <label for="metaDataLimite">Data Limite</label>
+                    <input type="date" id="metaDataLimite" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="metaValorDesejado">Valor Desejado</label>
+                    <input
+                        type="number"
+                        id="metaValorDesejado"
+                        step="0.01"
+                        placeholder="0,00"
+                        required
+                    />
+                </div>
+
+                <div class="input-group">
+                    <label for="metaImportancia">Importância</label>
+                    <input
+                        type="number"
+                        id="metaImportancia"
+                        min="1"
+                        max="5"
+                        placeholder="1 a 5"
+                    />
+                </div>
+
+                <div class="input-group">
+                    <label for="metaCategoria">Categoria</label>
+                    <select id="metaCategoria">
+                        <option value="">Nenhuma</option>
+                        <option>Transporte</option>
+                        <option>Lazer</option>
+                        <option>Moradia</option>
+                        <option>Saúde</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" class="config-btn">
+                Salvar Meta
+            </button>
+        </form>
+
+        <div class="linha-pontilhada"></div>
+
+        <!-- TABELA -->
+        <div class="metas-box">
+            <h3>Metas Cadastradas</h3>
+
+            <table class="metas-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Data Final</th>
+                        <th>Progresso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaMetas">
+                <tr>
+                    <td>Viagem para o Japão</td>
+                    <td>2026-12-31</td>
+                    <td>2500.00|10000.00</td>
+                    <td class="acoes-meta">
+                        <button type="button" class="btn-editar"
+                            onclick="editarMeta(this)">
+                            Editar
+                        </button>
+
+                        <button type="button" class="btn-excluir">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/configuracao.js}"></script>
 
 </body>
 </html>

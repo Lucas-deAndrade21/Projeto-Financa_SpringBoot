@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
     <div class="login-container">
         <form class="login-form" id="loginForm">
+            <h1 class="cherry-bomb-one-regular" style="color: #16a34a; ">MoneyLens</h1>
             <h1>Login</h1>
 
             <p id="mensagemLogin" style="text-align: center; font-weight: bold;"></p>
@@ -25,7 +35,10 @@
             </div>
 
             <button type="submit">Entrar</button>
+            <button class="cadastro-button" onclick="window.location.href='/cadastro'">Cadastrar-se</button>
         </form>
+
+
     </div>
     <script th:src="@{/js/login.js}"></script>
 </body>

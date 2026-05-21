@@ -15,18 +15,17 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // 1. Verifica se a tabela de categorias está vazia
-        if (categoriasRepository.count() == 0) {
-            // 2. Loop automático que lê todos os valores de dentro do seu Enum
-            for (TipoCategoria valorEnum : TipoCategoria.values()) {
+        // Garante que todas as categorias do enum existam no banco (upsert)
+        for (TipoCategoria valorEnum : TipoCategoria.values()) {
+            String nome = valorEnum.name();
+
+            boolean existe = categoriasRepository.findByNome(nome).isPresent();
+
+            if (!existe) {
                 Categorias novaCategoria = new Categorias();
-                
-                // Converte o nome do Enum (ex: ALIMENTACAO) em uma String bonita (Alimentação ou ALIMENTACAO)
-                novaCategoria.setNome(valorEnum.name()); 
-                
-                // Salva fisicamente no banco do Aiven
+                novaCategoria.setNome(nome);
                 categoriasRepository.save(novaCategoria);
-            }     
+            }
         }
     }
 }

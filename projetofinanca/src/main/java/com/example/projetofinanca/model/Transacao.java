@@ -47,6 +47,10 @@ public class Transacao {
     @JoinColumn(name = "usuario_id") // Nome da coluna da chave estrangeira no banco
     private Usuario usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "meta_id", nullable = true)
+    private Meta meta;
+
     public void setCategoria(Categorias semCategoria) {
         if (semCategoria == null) {
             this.categoria = null;

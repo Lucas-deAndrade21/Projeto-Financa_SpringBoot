@@ -66,7 +66,7 @@ function atualizarUltimasTransacoes(transacoes) {
 
         .sort((a, b) => b.id - a.id)
 
-        .slice(0, 5);
+        .slice(0, 3);
 
     if (ultimas.length === 0) {
 
@@ -84,8 +84,8 @@ function atualizarUltimasTransacoes(transacoes) {
 
         const classe =
             t.tipo_transacao === "RECEITA"
-                ? "receita"
-                : "despesa";
+                ? "receitas"
+                : "despesas";
 
         div.innerHTML = `
             <div class="transacao-info">

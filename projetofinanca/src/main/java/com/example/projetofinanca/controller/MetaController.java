@@ -1,8 +1,11 @@
 package com.example.projetofinanca.controller;
 
 import com.example.projetofinanca.model.Meta;
+import com.example.projetofinanca.model.Usuario;
 import com.example.projetofinanca.repository.MetaRepository;
 import com.example.projetofinanca.service.MetaService;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +31,14 @@ public class MetaController {
     }
 
     @GetMapping
-    public List<Meta> listarTodas() {
-        return service.listarTodas();
+    public List<Meta> listarTodas(
+            HttpSession session
+    ) {
+
+        Usuario usuarioLogado =
+            (Usuario) session.getAttribute("usuarioLogado");
+
+        return repository.findByUsuario(usuarioLogado);
     }
 
     @GetMapping("/{id}")
@@ -40,24 +49,69 @@ public class MetaController {
     }
 
     @PostMapping
-    public ResponseEntity<Meta> criarMeta(@RequestBody Meta meta) {
+    public ResponseEntity<?> criarMeta(
+            @RequestBody Meta meta,
+            HttpSession session
+    ) {
+
+        Usuario usuarioLogado =
+            (Usuario) session.getAttribute("usuarioLogado");
+
+        if (usuarioLogado == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Não autenticado.");
+        }
+
+        meta.setUsuario(usuarioLogado);
+
         Meta saved = service.salvar(meta);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Meta> atualizarMeta(
+    public ResponseEntity<?> atualizarMeta(
             @PathVariable Long id,
-            @RequestBody Meta meta
+            @RequestBody Meta metaAtualizada
     ) {
 
-        if (!repository.existsById(id)) {
+        Meta metaExistente =
+                repository.findById(id).orElse(null);
+
+        if (metaExistente == null) {
             return ResponseEntity.notFound().build();
         }
 
-        meta.setId(id);
+        // Atualiza apenas os campos permitidos
+        metaExistente.setNome(metaAtualizada.getNome());
 
-        Meta updated = service.salvar(meta);
+        metaExistente.setDescricao(
+                metaAtualizada.getDescricao()
+        );
+
+        metaExistente.setValorDesejado(
+                metaAtualizada.getValorDesejado()
+        );
+
+        metaExistente.setImportancia(
+                metaAtualizada.getImportancia()
+        );
+
+        metaExistente.setDataLimite(
+                metaAtualizada.getDataLimite()
+        );
+
+        metaExistente.setCategoria(
+                metaAtualizada.getCategoria()
+        );
+
+        // NÃO ALTERA O USUÁRIO
+
+        Meta updated =
+                service.salvar(metaExistente);
 
         return ResponseEntity.ok(updated);
     }

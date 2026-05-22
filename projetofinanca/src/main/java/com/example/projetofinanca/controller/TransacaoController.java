@@ -1,7 +1,9 @@
 package com.example.projetofinanca.controller;
 
+import com.example.projetofinanca.model.Meta;
 import com.example.projetofinanca.model.Transacao;
 import com.example.projetofinanca.model.Usuario;
+import com.example.projetofinanca.repository.MetaRepository;
 import com.example.projetofinanca.repository.TransacaoRepository;
 import com.example.projetofinanca.service.TransacaoService;
 
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -24,6 +27,9 @@ public class TransacaoController {
 
     @Autowired
     private TransacaoRepository repository;
+
+    @Autowired
+    private MetaRepository metaRepository;
 
     @GetMapping("/testevivo")
     public String teste() {
@@ -113,6 +119,28 @@ public class TransacaoController {
 
         Transacao salva = service.salvar(transacao);
 
+        if (transacao.getMeta() != null) {
+                Meta meta =
+                        metaRepository
+                        .findById(
+                                transacao.getMeta().getId()
+                        )
+                        .orElse(null);
+
+                if (meta != null) {
+
+                        BigDecimal atual =
+                                meta.getValorGuardado() == null
+                                ? BigDecimal.ZERO
+                                : meta.getValorGuardado();
+
+                        meta.setValorGuardado(
+                                atual.add(transacao.getValor())
+                        );
+
+                        metaRepository.save(meta);
+                }
+        }
         return ResponseEntity.ok(salva);
     }
 

@@ -192,13 +192,10 @@ li {
 
 #ultimas-transacoes{
 
-    margin-top: 12px;
-
+    margin-top: 5px;
     display: flex;
-
     flex-direction: column;
-
-    gap: 10px;
+    gap: 8px;
 }
 
 .transacao-item{
@@ -236,10 +233,24 @@ li {
 }
 
 .transacao-valor{
-
     font-size: 15px;
-
     font-weight: 700;
+}
+
+.receitas {
+    color: #16a34a;
+}
+
+.despesas {
+    color: #dc2626;
+}
+
+#ticket-medio {
+    color: #3b82f6;
+    text-align: center;
+    margin-bottom: 7%;
+    font-weight: 900;
+    font-size: 50px;
 }
 
 .receita{
@@ -455,6 +466,7 @@ input[type=submit] {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: 16%;
 }
 
 input[type=submit]:hover {
@@ -507,8 +519,11 @@ input[type=submit]:hover {
 .movimento td {
     padding: 14px 16px;
     border-bottom: 1px solid #f0f0f0;
-    color: #374151;
 }
+
+.movimento td:not(.receitas):not(.despesas) {
+    color: #374151;
+}   
 
 .movimento:hover {
     background: #fafafa;
@@ -516,7 +531,6 @@ input[type=submit]:hover {
 
 .movimento td:nth-child(2) {
     font-weight: 600;
-    color: #dc2626; /* vermelho para despesas */
 }
 
 #gerar-relatorio {

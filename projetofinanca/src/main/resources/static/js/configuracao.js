@@ -1,3 +1,14 @@
+function formatarMoeda(valor) {
+
+    return Number(valor).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+}
+
 // ==========================================
 // MODAIS
 // ==========================================
@@ -282,37 +293,293 @@ if (formAlterarSenha) {
 // ==========================================
 // METAS
 // ==========================================
-function editarMeta(botao) {
 
-    const linha = botao.closest("tr");
+const API_METAS = "/api/metas";
 
-    const colunas = linha.querySelectorAll("td");
+const tabelaMetas =
+    document.getElementById("tabelaMetas");
 
-    const nome = colunas[0].textContent.trim();
+const formMeta =
+    document.querySelector(".meta-form");
 
-    const dataLimite =colunas[1].textContent.trim();
+let metaEditandoId = null;
 
-    const progresso =colunas[2].textContent.trim();
+// ==========================================
+// CARREGAR METAS
+// ==========================================
+async function carregarMetas() {
 
-    const partes = progresso.split("|");
+    try {
 
-    const valorDesejado =partes.length > 1 ? partes[1] : "";
+        const response = await fetch(API_METAS, {
+            credentials: "include"
+        });
 
-    document.getElementById("metaNome").value =nome;
+        if (!response.ok) {
+            throw new Error();
+        }
 
-    document.getElementById("metaDataLimite").value =dataLimite;
+        const metas = await response.json();
 
-    document.getElementById("metaValorDesejado").value =valorDesejado;
+        renderizarMetas(metas);
+
+    } catch (error) {
+
+        console.error(error);
+
+        tabelaMetas.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    Erro ao carregar metas.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// ==========================================
+// RENDERIZAR
+// ==========================================
+function renderizarMetas(metas) {
+
+    tabelaMetas.innerHTML = "";
+
+    if (metas.length === 0) {
+
+        tabelaMetas.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    Nenhuma meta cadastrada.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    metas.forEach(meta => {
+
+        tabelaMetas.innerHTML += `
+            <tr>
+
+                <td>${meta.nome}</td>
+
+                <td>${meta.dataLimite || "-"}</td>
+
+                <td>
+                    ${formatarMoeda(
+                        Number(meta.valorGuardado || 0)
+                    )}
+                    /
+                    ${formatarMoeda(
+                        Number(meta.valorDesejado || 0)
+                    )}
+                </td>
+
+                <td class="acoes-meta">
+
+                    <button
+                        type="button"
+                        class="btn-editar"
+                        onclick="editarMeta(${meta.id})"
+                    >
+                        Editar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-excluir"
+                        onclick="excluirMeta(${meta.id})"
+                    >
+                        Excluir
+                    </button>
+
+                </td>
+
+            </tr>
+        `;
+    });
+}
+
+// ==========================================
+// SALVAR META
+// ==========================================
+if(formMeta) {
+    formMeta.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            const body = {
+
+                nome:
+                    document.getElementById("metaNome").value,
+
+                descricao:
+                    document.getElementById("metaDescricao").value,
+
+                dataLimite:
+                    document.getElementById("metaDataLimite").value,
+
+                valorDesejado:
+                    Number(
+                        document.getElementById(
+                            "metaValorDesejado"
+                        ).value
+                    ),
+
+                importancia:
+                    Number(
+                        document.getElementById(
+                            "metaImportancia"
+                        ).value
+                    ),
+
+                valorAtual: 0
+            };
+
+            try {
+
+                const url =
+                    metaEditandoId
+                        ? `${API_METAS}/${metaEditandoId}`
+                        : API_METAS;
+
+                const method =
+                    metaEditandoId
+                        ? "PUT"
+                        : "POST";
+
+                const response = await fetch(url, {
+
+                    method,
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(body)
+                });
+
+                if (!response.ok) {
+                    throw new Error();
+                }
+
+                formMeta.reset();
+
+                metaEditandoId = null;
+
+                await carregarMetas();
+
+                alert(
+                    metaEditandoId
+                        ? "Meta atualizada."
+                        : "Meta criada."
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Erro ao salvar meta.");
+            }
+        }
+    );
+}
+
+// ==========================================
+// EDITAR
+// ==========================================
+async function editarMeta(id) {
+
+    try {
+
+        const response = await fetch(
+            `${API_METAS}/${id}`,
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error();
+        }
+
+        const meta = await response.json();
+
+        metaEditandoId = meta.id;
+
+        document.getElementById("metaNome").value =
+            meta.nome || "";
+
+        document.getElementById("metaDescricao").value =
+            meta.descricao || "";
+
+        document.getElementById("metaDataLimite").value =
+            meta.dataLimite || "";
+
+        document.getElementById("metaValorDesejado").value =
+            meta.valorDesejado || "";
+
+        document.getElementById("metaImportancia").value =
+            meta.importancia || "";
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Erro ao carregar meta.");
+    }
+}
+
+// ==========================================
+// EXCLUIR
+// ==========================================
+async function excluirMeta(id) {
+
+    const confirmar =
+        confirm("Deseja excluir esta meta?");
+
+    if (!confirmar) return;
+
+    try {
+
+        const response = await fetch(
+            `${API_METAS}/${id}`,
+            {
+                method: "DELETE",
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error();
+        }
+
+        await carregarMetas();
+
+        alert("Meta removida.");
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Erro ao excluir meta.");
+    }
 }
 
 // ==========================================
 // INIT
 // ==========================================
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
+        carregarCategorias();
 
-// ==========================================
-// CARREGAR CATEGORIAS
-// ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-    carregarCategorias();
-});
+        carregarMetas();
+    }
+);

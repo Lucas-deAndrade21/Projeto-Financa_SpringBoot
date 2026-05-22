@@ -64,22 +64,26 @@ async function gerarRelatorio() {
         // }
         const relatorio = {};
 
-        transacoes.forEach(transacao => {
-            const categoria =
-                transacao.categoria?.nome || "Sem Categoria";
+        transacoes
+            .filter(transacao =>
+                transacao.tipo_transacao === "DESPESA"
+            )
+            .forEach(transacao => {
 
-            const data = new Date(transacao.data);
-            const mes = data.getMonth(); // 0 a 11
-            const valor = Number(transacao.valor || 0);
+                const categoria =
+                    transacao.categoria?.nome || "Sem Categoria";
 
-            // Cria array de 12 posições
-            if (!relatorio[categoria]) {
-                relatorio[categoria] = Array(12).fill(0);
-            }
+                const data = new Date(transacao.data);
+                const mes = data.getMonth();
 
-            // Soma valor no mês correspondente
-            relatorio[categoria][mes] += valor;
-        });
+                const valor = Number(transacao.valor || 0);
+
+                if (!relatorio[categoria]) {
+                    relatorio[categoria] = Array(12).fill(0);
+                }
+
+                relatorio[categoria][mes] += valor;
+            });
 
         // Limpa tabela
         tabelaRelatorio.innerHTML = "";

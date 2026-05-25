@@ -111,10 +111,14 @@ Após iniciar o servidor, acesse:
 
  <h1 align="center" style="color:#16a34a;"> 👨‍💻 Autores </h1>
 
+<div align="center">
+
 | 👤 Nome | 💼 Função | 📌 Responsabilidades |
 |------|------|------|
 | [**Carlos Eduardo**](https://github.com/Karlos-Eduardo-Mrqs) | Back-end & Arquitetura | Estrutura do sistema e banco de dados, regras de negócio |
 | [**Lucas De Andrade**](https://github.com/Lucas-deAndrade21) | Front-end & UI/UX | Interface, experiência do usuário e gestão de tarefas |
 | [**Victor Leon**](https://github.com/VictorLMMartello) | Back-end & Integrações | Integrações, modelagem e regras de negócio |
+
+</div>
 
 ---

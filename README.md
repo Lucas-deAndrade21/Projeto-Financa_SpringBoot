@@ -3,7 +3,7 @@
 
 <div align="center">
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-green?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-concluído-green?style=for-the-badge)
 ![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)

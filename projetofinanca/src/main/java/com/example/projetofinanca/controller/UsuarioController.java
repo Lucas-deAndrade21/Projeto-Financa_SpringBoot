@@ -32,7 +32,7 @@ public class UsuarioController {
     @GetMapping("/testevivo")
     public String teste() {
         return "O RestController está vivo e ouvindo!";
-    }
+       }
 
     // Listar todos os usuários
     @GetMapping
